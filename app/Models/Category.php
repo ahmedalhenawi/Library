@@ -19,5 +19,8 @@ class Category extends Model
         }
     }
 
+    function books(){
+        $this->hasMany(Book::class);
+    }
 
 }

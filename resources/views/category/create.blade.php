@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 
-@section('contnet')
+@section('content')
 
 
 

@@ -2,7 +2,7 @@
 
 @section('header' , 'Category')
 
-@section('contnet')
+@section('content')
     <div class="col-12 col-md-10">
 
     <div class="d-flex justify-content-between align-items-center mb-4"  style="width: 100%">

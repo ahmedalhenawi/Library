@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +19,11 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::resource('category', \App\Http\Controllers\CategoryController::class);
 
+//Route::resource('category', \App\Http\Controllers\CategoryController::class);
+//Route::resource('book' , \App\Http\Controllers\BookController::class);
 
+Route::resources([
+    'category' => CategoryController::class,
+    'book' => BookController::class,
+]);
