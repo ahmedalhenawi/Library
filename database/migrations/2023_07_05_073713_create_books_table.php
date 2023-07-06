@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('author_name');
             $table->text('description');
             $table->foreignId('category_id')->constrained('categories');
-            $table->timestamp('publication_at');
+            $table->date('publication_at');
             $table->timestamps();
         });
 

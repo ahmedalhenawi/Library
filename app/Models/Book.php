@@ -12,12 +12,15 @@ class Book extends Model
                             'author_name',
                             'description',
                             'category_id',
-                            'categories',
                             'publication_at'];
 
 
-    function category(){
-        $this->belongsTo(Category::class);
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function getCategoryIdAttribute($value){
+         return Category::find($value)->name;
     }
 
 

@@ -7,9 +7,9 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4"  style="width: 100%">
             <div>
-                <h3>show categories</h3>
+                <h3>show Books</h3>
             </div>
-            <a href="{{ route('book.create') }}" class="btn btn-dark px-5">Add new category</a>
+            <a href="{{ route('book.create') }}" class="btn btn-dark px-5">Add new Book</a>
         </div>
 
 
@@ -33,6 +33,33 @@
             </tr>
             </thead>
             <tbody>
+                @forelse($books as $book)
+                    <tr>
+                    <td>{{$book->id}}</td>
+                    <td>{{$book->name}}</td>
+                    <td>{{$book->author_name}}</td>
+
+
+                    <td>{{$book->category_id}}</td>
+{{--                    <td>{{\App\Models\Category::find($book->category_id)->name}}</td>--}}
+
+
+                    <td>{{$book->description}}</td>
+                    <td>{{$book->publication_at}}</td>
+                    <td>
+                        <form method="POST" action="{{route('book.destroy' , ['book' =>$book->id ])}}"  class="d-inline">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        </form>
+
+                        <a href="{{route('book.edit' ,  ['book'=>$book->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>
+                    </td>
+
+                    </tr>
+
+                @empty
+                @endforelse
             </tbody>
         </table>
 {{--        {{$books->links()}}--}}
