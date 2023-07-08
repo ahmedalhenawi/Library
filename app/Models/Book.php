@@ -19,9 +19,4 @@ class Book extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function getCategoryIdAttribute($value){
-         return Category::find($value)->name;
-    }
-
-
 }

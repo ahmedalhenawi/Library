@@ -14,7 +14,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::paginate(5);
+        $books = Book::with('category')->paginate(5);
         return view('book.index' ,compact('books'));
     }
 
@@ -24,7 +24,7 @@ class BookController extends Controller
     public function create()
     {
         $categories = DB::table('categories')
-                    ->select('name', 'id')
+                    ->select('name', 'id')->where('is_active', '1')
                     ->get();
         return view('book.create' , compact('categories'));
     }
@@ -75,9 +75,11 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        $categories = DB::table('categories')
-            ->select('name', 'id')
-            ->get();
+//        $categories = DB::table('categories')
+//        ->select('name', 'id')->where('is_active', '1')
+//        ->get();
+        $categories = Category::where('is_active' , true)->get();
+
         return view('book.edit' , compact('book' ,'categories'));
     }
 
@@ -114,8 +116,22 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
-    {
+//    public function destroy(Book $book)
+//    {
+//        $deleted = $book->delete();
+//        if($deleted){
+//            session()->flash('msg' , 'deleted Successfully');
+//            session()->flash('style' , 'danger');
+//        }else{
+//            session()->flash('msg' , 'fail deleting ');
+//            session()->flash('style' , 'danger');
+//        }
+//        return redirect()->route('book.index');
+//    }
+
+
+    public function delete($id){
+        $book = Book::find($id);
         $deleted = $book->delete();
         if($deleted){
             session()->flash('msg' , 'deleted Successfully');

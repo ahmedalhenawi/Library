@@ -27,3 +27,6 @@ Route::resources([
     'category' => CategoryController::class,
     'book' => BookController::class,
 ]);
+
+Route::get("category/delete/{id}" , [CategoryController::class , 'delete']);
+Route::get("book/delete/{id}" , [BookController::class , 'delete']);

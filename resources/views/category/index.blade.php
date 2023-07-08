@@ -38,3 +38,37 @@
 
 
 @endsection
+
+@section('scripts')
+
+    <script>
+
+
+        $('.delete').click(function () {
+            var id = $(this).attr('data-id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this imaginary file!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location = `/category/delete/${id}`;
+                        swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
+
+        });
+
+
+
+    </script>
+
+
+@endsection

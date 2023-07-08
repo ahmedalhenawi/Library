@@ -32,30 +32,22 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        if($request->is_active){
-            $request->is_active = true;
-        }else{
-            $request->is_active = false;
 
-        }
         if ($request->has('img')){
             $img = $request->file('img');
             $imgName = time().$request->name . '.'. $img->getClientOriginalExtension();
             $request->file('img')->storePubliclyAs('category' ,$imgName , ['disk' => 'public']);
              $request->img = $imgName;
         }
+
         $created = Category::create([
             'name'=> $request->name ,
             'img'=> $request->img  ,
-            'is_active'=> $request->is_active
+            'is_active'=> $request->is_active? $request->is_active :0
         ]);
-        if ($created){
-            session()->flash('msg' , 'created Successfully');
-            session()->flash('style' , 'success');
-        }else{
-            session()->flash('msg' , 'fail updating ');
-            session()->flash('style' , 'danger');
-        }
+
+            session()->flash('msg' , $created?'created Successfully':'fail updating ');
+            session()->flash('style' , $created?'success':'danger');
         return redirect()->route('category.index');
     }
 
@@ -64,7 +56,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+
     }
 
     /**
@@ -78,22 +70,38 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
-        if (Storage::disk('public')->exists("category/$category->img")) {
-            Storage::disk('public')->delete("category/$category->img");
-        }
+
+
+        $request->validate([
+            'name' => 'required',
+            'img'=> 'mimes:png,jpg',
+            'is_active'=>'in:1,0|nullable'
+        ]);
+
+
+
 
         if ($request->has('img')){
+
+            //delete old image if exist
+            if (Storage::disk('public')->exists("category/$category->img")) {
+                Storage::disk('public')->delete("category/$category->img");
+            }
+
+            // receive and store new image
             $img = $request->file('img');
             $imgName = time().$request->name . '.'. $img->getClientOriginalExtension();
             $request->file('img')->storePubliclyAs('category' ,$imgName , ['disk' => 'public']);
              $request->img = $imgName;
         }
+
+
         $updated =  $category->update([
             'name' => $request->name ,
-            'img' => $request->img ,
-            'is_active' => $request->is_active
+            'img' => $request->img? $request->img : $category->img  ,
+            'is_active' => $request->is_active ? $request->is_active:0
         ]);
         if ($updated){
             session()->flash('msg' , 'updated Successfully');
@@ -108,13 +116,30 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+//    public function destroy(Category $category)
+//    {
+//        if (Storage::disk('public')->exists("category/$category->img")) {
+//            Storage::disk('public')->delete("category/$category->img");
+//        }
+//
+//
+//        $deleted = $category->delete();
+//        if($deleted){
+//            session()->flash('msg' , 'deleted Successfully');
+//            session()->flash('style' , 'danger');
+//        }else{
+//            session()->flash('msg' , 'fail deleting ');
+//            session()->flash('style' , 'danger');
+//        }
+//        return redirect()->route('category.index');
+//    }
+
+    public function delete($id)
     {
+        $category = Category::find($id);
         if (Storage::disk('public')->exists("category/$category->img")) {
             Storage::disk('public')->delete("category/$category->img");
         }
-
-
         $deleted = $category->delete();
         if($deleted){
             session()->flash('msg' , 'deleted Successfully');
@@ -125,4 +150,5 @@ class CategoryController extends Controller
         }
         return redirect()->route('category.index');
     }
+
 }

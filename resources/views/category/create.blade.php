@@ -40,7 +40,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="exampleInputEmail1">name</label>
-                        <input type="text" class="form-control" name="name"  id="exampleInputEmail1" placeholder="Enter Name">
+                        <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="exampleInputEmail1" placeholder="Enter Name">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputFile">File input</label>

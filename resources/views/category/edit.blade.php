@@ -16,7 +16,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3>Create new category</h3>
+                <h3>update category</h3>
             </div>
             <a href="{{ route('category.index') }}" class="btn btn-dark px-5">show categories</a>
         </div>

@@ -40,19 +40,19 @@
                     <td>{{$book->author_name}}</td>
 
 
-                    <td>{{$book->category_id}}</td>
+                    <td>{{$book->category->name}}</td>
 {{--                    <td>{{\App\Models\Category::find($book->category_id)->name}}</td>--}}
 
 
                     <td>{{$book->description}}</td>
                     <td>{{$book->publication_at}}</td>
                     <td>
-                        <form method="POST" action="{{route('book.destroy' , ['book' =>$book->id ])}}"  class="d-inline">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                        </form>
-
+{{--                        <form method="POST" action="{{route('book.destroy' , ['book' =>$book->id ])}}"  class="d-inline">--}}
+{{--                            @csrf--}}
+{{--                            @method('delete')--}}
+{{--                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="confirm('are you sure to delete this')" >Delete</button>--}}
+{{--                        </form>--}}
+                        <a href="#" class="btn btn-outline-danger btn-sm delete" data-id="{{$book->id}}">DELETE</a>
                         <a href="{{route('book.edit' ,  ['book'=>$book->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>
                     </td>
 
@@ -65,5 +65,38 @@
 {{--        {{$books->links()}}--}}
     </div>
 
+
+@endsection
+
+@section('scripts')
+
+    <script>
+
+
+        $('.delete').click(function () {
+            var id = $(this).attr('data-id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this imaginary file!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location = `/book/delete/${id}`;
+                        swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
+
+        });
+
+
+
+    </script>
 
 @endsection
