@@ -122,35 +122,32 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-//    public function destroy(Category $category)
+    public function destroy(Category $category)
+    {
+
+        $deleted = $category->delete();
+        if ($deleted) {
+            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
+
+        }
+        else {
+            return response()->json(['message'=>'فشلت عملية الحذف'],Response::HTTP_BAD_REQUEST);
+
+        }
+
+    }
+
+//    public function delete($id)
 //    {
+//        $category = Category::find($id);
 //        if (Storage::disk('public')->exists("category/$category->img")) {
 //            Storage::disk('public')->delete("category/$category->img");
 //        }
-//
-//
 //        $deleted = $category->delete();
-//        if($deleted){
-//            session()->flash('msg' , 'deleted Successfully');
-//            session()->flash('style' , 'danger');
-//        }else{
-//            session()->flash('msg' , 'fail deleting ');
-//            session()->flash('style' , 'danger');
+//
+//        if ($deleted){
+//            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
 //        }
-//        return redirect()->route('category.index');
-//    }
-
-    public function delete($id)
-    {
-        $category = Category::find($id);
-        if (Storage::disk('public')->exists("category/$category->img")) {
-            Storage::disk('public')->delete("category/$category->img");
-        }
-        $deleted = $category->delete();
-
-        if ($deleted){
-            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
-        }
 
 //        if($deleted){
 //            session()->flash('msg' , 'deleted Successfully');
@@ -160,6 +157,5 @@ class CategoryController extends Controller
 //            session()->flash('style' , 'danger');
 //        }
 //        return redirect()->route('category.index');
-    }
 
 }

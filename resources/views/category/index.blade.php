@@ -8,7 +8,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4"  style="width: 100%">
         <div>
             <h3>show categories</h3>
-        </div
+        </div>
         <a href="{{ route('category.create') }}" class="btn btn-dark px-5">Add new category</a>
     </div>
 
@@ -59,9 +59,7 @@
                 .then((willDelete) => {
                     if (willDelete) {
 
-                        axios.delete('/category/delete', {
-                            data: {id: id}
-                        })
+                        axios.delete(`/category/${id}`)
                         // axios.delete(`${url+id}` )
                             .then(function(response) {
                                 swal(response.data.message);
@@ -80,14 +78,14 @@
 
 
 
-            axios.post(url+id )
-                .then(function(response) {
-                    swal(response.data.message);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                    swal(error.response.data.message);
-                });
+            // axios.post(url+id )
+            //     .then(function(response) {
+            //         swal(response.data.message);
+            //     })
+            //     .catch(function(error) {
+            //         console.log(error);
+            //         swal(error.response.data.message);
+            //     });
         }
     </script>
 
