@@ -89,21 +89,20 @@ function create(){
 
 
 
-        axios.post('{{ route('category.store') }}', formData) 
+        axios.post('{{ route('category.store') }}', formData)
         .then(function(response) {
-  swal(response.data.message);
-document.getElementById('my-form').reset();
+              swal(response.data.message);
+              document.getElementById('my-form').reset();
 
          })
         .catch(function(error) {
-        console.log(error);
- swal(error.response.data.message);
+            console.log(error);
+            swal(error.response.data.message);
 
 
- 
+
         });
         }
-
 
 
 </script>

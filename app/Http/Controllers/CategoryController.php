@@ -33,8 +33,8 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $categoryStora= Category::create($request->getData());
-        if ($categoryStora) {
+        $categoryStore= Category::create($request->getData());
+        if ($categoryStore) {
             return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
             # code...
         }
@@ -147,14 +147,19 @@ class CategoryController extends Controller
             Storage::disk('public')->delete("category/$category->img");
         }
         $deleted = $category->delete();
-        if($deleted){
-            session()->flash('msg' , 'deleted Successfully');
-            session()->flash('style' , 'danger');
-        }else{
-            session()->flash('msg' , 'fail deleting ');
-            session()->flash('style' , 'danger');
+
+        if ($deleted){
+            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
         }
-        return redirect()->route('category.index');
+
+//        if($deleted){
+//            session()->flash('msg' , 'deleted Successfully');
+//            session()->flash('style' , 'danger');
+//        }else{
+//            session()->flash('msg' , 'fail deleting ');
+//            session()->flash('style' , 'danger');
+//        }
+//        return redirect()->route('category.index');
     }
 
 }

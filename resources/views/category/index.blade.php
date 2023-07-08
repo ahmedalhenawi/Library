@@ -8,7 +8,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4"  style="width: 100%">
         <div>
             <h3>show categories</h3>
-        </div>
+        </div
         <a href="{{ route('category.create') }}" class="btn btn-dark px-5">Add new category</a>
     </div>
 
@@ -16,7 +16,6 @@
     @if (session()->has('msg'))
         <div class="alert alert-{{session('style')}}" role="alert">
             {{session('msg')}}
-{{--            @dd(session('msg'))--}}
         </div>
     @endif
     <table class="table">
@@ -41,11 +40,15 @@
 
 @section('scripts')
 
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
 
 
-        $('.delete').click(function () {
-            var id = $(this).attr('data-id');
+        function deleteItem(url , id ){
+
+
+
             swal({
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -55,19 +58,37 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.location = `/category/delete/${id}`;
-                        swal("Poof! Your imaginary file has been deleted!", {
-                            icon: "success",
-                        });
+
+                        axios.delete('/category/delete', {
+                            data: {id: id}
+                        })
+                        // axios.delete(`${url+id}` )
+                            .then(function(response) {
+                                swal(response.data.message);
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                                swal(error.response.data.message);
+                            });
+
                     } else {
                         swal("Your imaginary file is safe!");
                     }
                 });
 
-        });
 
 
 
+
+            axios.post(url+id )
+                .then(function(response) {
+                    swal(response.data.message);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                    swal(error.response.data.message);
+                });
+        }
     </script>
 
 

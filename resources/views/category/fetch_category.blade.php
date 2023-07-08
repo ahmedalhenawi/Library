@@ -9,7 +9,11 @@
 {{--            @method('delete')--}}
 {{--            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>--}}
 {{--        </form>--}}
-        <a href="#" class="btn btn-outline-danger btn-sm delete" data-id="{{$data->id}}">DELETE</a>
-        <a href="{{route('category.edit' ,  ['category'=>$data->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>
+{{--        <a href="#" class="btn btn-outline-danger btn-sm delete" data-id="{{$data->id}}">DELETE</a>--}}
+
+        <button onclick="deleteItem('/category/delete/'   , {{$data->id}})" class="btn btn-outline-danger btn-sm">Delete</button>
+
+
+                <a href="{{route('category.edit' ,  ['category'=>$data->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>
     </td>
 </tr>
