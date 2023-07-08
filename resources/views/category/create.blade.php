@@ -35,9 +35,9 @@
 {{--                <a href="{{route('category.index')}}" class=" btn btn-primary" >show all Categories</a>--}}
 
 
-                <form action="{{route('category.store')}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="card-body">
+                <form id="my-form">
+
+                 <div class="card-body">
                     <div class="form-group">
                         <label for="exampleInputEmail1">name</label>
                         <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="exampleInputEmail1" placeholder="Enter Name">
@@ -55,14 +55,16 @@
                         </div>
                     </div>
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1" name="is_active" value="{{true}}">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active"  >
+
                         <label class="form-check-label" for="exampleCheck1">Status</label>
                     </div>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" onclick="create()" class="btn btn-primary">Submit</button>
+
                 </div>
             </form>
 
@@ -72,4 +74,37 @@
 
 
 
+@endsection
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+<script>
+function create(){
+        const myForm = document.getElementById('my-form');
+        const formData = new FormData(myForm);
+        formData.append('is_active', document.getElementById('is_active').checked);
+
+
+
+
+        axios.post('{{ route('category.store') }}', formData) 
+        .then(function(response) {
+  swal(response.data.message);
+document.getElementById('my-form').reset();
+
+         })
+        .catch(function(error) {
+        console.log(error);
+ swal(error.response.data.message);
+
+
+ 
+        });
+        }
+
+
+
+</script>
 @endsection

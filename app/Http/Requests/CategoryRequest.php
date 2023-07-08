@@ -25,7 +25,18 @@ class CategoryRequest extends FormRequest
         return [
             'name' => 'required',
             'img'=> 'required|mimes:png,jpg',
-            'is_active'=>'in:1,0|nullable'
+            'is_active'=>'required|string|in:true,false'
         ];
+    }
+    public function getData(){
+        $data=$this->validated();
+        $data['is_active'] = $data['is_active'] == 'true';
+
+        if ($this->hasFile('img')) {
+            $imageName = time() . "" . '.' . $this->file('img')->getClientOriginalExtension();
+            $this->file('img')->storePubliclyAs('People', $imageName, ['disk' => 'public']);
+            $data['img'] = 'Category/' . $imageName;
+        }
+        return $data;
     }
 }

@@ -12,7 +12,7 @@ class Category extends Model
         protected $fillable = ['name','img' , 'is_active'];
 
     public function getIsActiveAttribute($value){
-        if($value == 1 ){
+        if($value  ){
             return 'active';
         }else{
             return 'non-avtive';

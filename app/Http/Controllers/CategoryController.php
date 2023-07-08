@@ -6,6 +6,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
@@ -32,23 +33,28 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-
-        if ($request->has('img')){
-            $img = $request->file('img');
-            $imgName = time().$request->name . '.'. $img->getClientOriginalExtension();
-            $request->file('img')->storePubliclyAs('category' ,$imgName , ['disk' => 'public']);
-             $request->img = $imgName;
+        $categoryStora= Category::create($request->getData());
+        if ($categoryStora) {
+            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
+            # code...
         }
 
-        $created = Category::create([
-            'name'=> $request->name ,
-            'img'=> $request->img  ,
-            'is_active'=> $request->is_active? $request->is_active :0
-        ]);
+         // if ($request->has('img')){
+        //     $img = $request->file('img');
+        //     $imgName = time().$request->name . '.'. $img->getClientOriginalExtension();
+        //     $request->file('img')->storePubliclyAs('category' ,$imgName , ['disk' => 'public']);
+        //      $request->img = $imgName;
+        // }
 
-            session()->flash('msg' , $created?'created Successfully':'fail updating ');
-            session()->flash('style' , $created?'success':'danger');
-        return redirect()->route('category.index');
+        // $created = Category::create([
+        //     'name'=> $request->name ,
+        //     'img'=> $request->img  ,
+        //     'is_active'=> $request->is_active? $request->is_active :0
+        // ]);
+
+        //     session()->flash('msg' , $created?'created Successfully':'fail updating ');
+        //     session()->flash('style' , $created?'success':'danger');
+        // return redirect()->route('category.index');
     }
 
     /**
