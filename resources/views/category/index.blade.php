@@ -45,48 +45,42 @@
     <script>
 
 
-        function deleteItem(url , id ){
+        function deleting(id){
 
 
 
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this imaginary file!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
                         axios.delete(`/category/${id}`)
-                        // axios.delete(`${url+id}` )
                             .then(function(response) {
-                                swal(response.data.message);
+                                Swal.fire(
+                                    'Deleted!',
+                                    `${response.data.message}`,
+                                    'success'
+                                )
                             })
                             .catch(function(error) {
-                                console.log(error);
-                                swal(error.response.data.message);
-                            });
+                                Swal.fire(
+                                    'ERROR',
+                                    // `${error.response.data.message}`,
+                                    'هذا الصنف مرتبط بمجموعة كتب' ,
+                                    'error'
+                                )
 
-                    } else {
-                        swal("Your imaginary file is safe!");
-                    }
-                });
-
-
-
-
-
-            // axios.post(url+id )
-            //     .then(function(response) {
-            //         swal(response.data.message);
-            //     })
-            //     .catch(function(error) {
-            //         console.log(error);
-            //         swal(error.response.data.message);
-            //     });
+                                });
+                }
+                           });
         }
+
+
     </script>
 
 

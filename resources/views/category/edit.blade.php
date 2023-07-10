@@ -35,35 +35,28 @@
         {{--                <a href="{{route('category.index')}}" class=" btn btn-primary" >show all Categories</a>--}}
 
 
-        <form action="{{route('category.update' , ['category' => $category->id])}}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('put')
+        <form id="my-form">
+
             <div class="card-body">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">name</label>
-                    <input type="text" class="form-control" name="name"  value="{{$category->name}}" id="exampleInputEmail1" placeholder="Enter Name">
+                    <label for="name">name</label>
+                    <input type="text" class="form-control" name="name"  value="{{$category->name}}" id="name" placeholder="Enter Name">
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile" name="img">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
-                        </div>
-                    </div>
+
+                <div class="mb-3">
+                    <label for="cover" class="form-label">image</label>
+                    <input class="form-control" type="file" id="img" name="img" >
                 </div>
+
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" @checked($category->is_active == 'active') id="exampleCheck1" name="is_active" value="{{true}}">
-                    <label class="form-check-label" for="exampleCheck1">Status</label>
+                    <input type="checkbox" class="form-check-input" @checked($category->is_active == 'Active') id="is_active" name="is_active" value="{{true}}">
+                    <label class="form-check-label" for="is_active">Status</label>
                 </div>
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="button" onclick="updating({{$category->id}})" class="btn btn-primary">Update</button>
             </div>
         </form>
 
@@ -73,4 +66,62 @@
 
 
 
+@endsection
+
+
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+    <script>
+         function updating(category_id){
+
+            const myForm = document.getElementById('my-form');
+            const formData = new FormData(myForm);
+            formData.append('is_active', (document.getElementById('is_active').checked)?1:0);
+            formData.append('_method', 'put');
+
+             // for (var pair of formData.entries()) {
+             //     console.log(pair[0]+ ', ' + pair[1]);
+             // }
+
+
+             Swal.fire({
+                 title: 'Do you want to save the changes?',
+                 showDenyButton: true,
+                 showCancelButton: true,
+                 confirmButtonText: 'Save',
+                 denyButtonText: `Don't save`,
+             }).then((result) => {
+                 /* Read more about isConfirmed, isDenied below */
+                 if (result.isConfirmed) {
+
+                     axios.post("{{route('category.update', ['category'=> $category->id])}}", formData)
+                         .then(function(response) {
+                             Swal.fire('Saved!', `${response.data.message}`, `${response.data.style}`)
+                             // document.getElementById('my-form').reset();
+                         })
+                         .catch(function(error) {
+                             // console.log(error);
+                             Swal.fire('not Saved!', `${error.response.data.message}`, `${error.response.data.style}`)
+                         });
+
+                 } else if (result.isDenied) {
+                     Swal.fire('Changes are not saved', '', 'info')
+                 }
+             })
+
+
+
+
+
+
+
+
+
+        }
+
+
+    </script>
 @endsection

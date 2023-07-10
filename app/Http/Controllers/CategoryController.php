@@ -6,17 +6,22 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use function Termwind\style;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    private $columns = ['name' , 'is_active', 'img'];
     public function index()
     {
+
         $categories = Category::paginate(2);
         return view('category.index',compact('categories'));
+
     }
 
     /**
@@ -31,30 +36,35 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
-        $categoryStore= Category::create($request->getData());
-        if ($categoryStore) {
-            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
-            # code...
+        $validator = Validator($request->all() , [
+            'name' => 'required',
+            'img'=> 'required|mimes:png,jpg',
+            'is_active'=>'required|string|in:true,false'
+        ]);
+
+        if (!$validator->fails()){
+
+            $imgName = 'category_'.time().'.'.$request->file('img')->getClientOriginalExtension();
+            $request->file('img')->storePubliclyAs('category' , $imgName , ['disk'=>'public']);
+            $request->img = $imgName;
+            $request->is_active = $request->is_active ?1:0;
+
+            $created =  Category::create([
+                'name'=>$request->name ,
+                'is_active'=>$request->is_active ,
+                'img'=>$request->img ,
+
+            ]);
+            return response()->json(['message'=>$created?'تمت العملية بنجاح':'فشلت عملية الاضافة ', 'style'=>'success'],$created ?Response::HTTP_OK : Response::HTTP_BAD_REQUEST );
+
+
+        }else{
+            return response()->json(['message'=>$validator->getMessageBag()->get('name')[0] , 'style'=>'error'],Response::HTTP_OK);
+
         }
 
-         // if ($request->has('img')){
-        //     $img = $request->file('img');
-        //     $imgName = time().$request->name . '.'. $img->getClientOriginalExtension();
-        //     $request->file('img')->storePubliclyAs('category' ,$imgName , ['disk' => 'public']);
-        //      $request->img = $imgName;
-        // }
-
-        // $created = Category::create([
-        //     'name'=> $request->name ,
-        //     'img'=> $request->img  ,
-        //     'is_active'=> $request->is_active? $request->is_active :0
-        // ]);
-
-        //     session()->flash('msg' , $created?'created Successfully':'fail updating ');
-        //     session()->flash('style' , $created?'success':'danger');
-        // return redirect()->route('category.index');
     }
 
     /**
@@ -78,47 +88,49 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        $request->is_active = $request->is_active?1:0;
 
-
-        $request->validate([
+        $validator = Validator($request->all(), [
             'name' => 'required',
-            'img'=> 'mimes:png,jpg',
-            'is_active'=>'in:1,0|nullable'
+            'img' => 'mimes:png,jpg',
+            'is_active' => 'required|string|in:true,false,1,0'
         ]);
+        if (!$validator->fails()) {
+
+            if ($request->has('img')) {
+                //delete old image if exist
+                if (Storage::disk('public')->exists("category/$category->img")) {
+                    Storage::disk('public')->delete("category/$category->img");
+                }
+
+                // receive and store new image
+                $img = $request->file('img');
+                $imgName = 'category_'.time() . '.' . $img->getClientOriginalExtension();
+                $request->file('img')->storePubliclyAs('category', $imgName, ['disk' => 'public']);
+                $request->img = $imgName;
+                  }
+
+                $updated = $category->update([
+                    'name'=>$request->name,
+                    'img'=>$request->img?$request->img:$category->img,
+                    'is_active'=>$request->is_active,
+
+                ]);
+                if ($updated) {
+                    return response()->json(['message' => 'تمت العملية بنجاح' , 'style' => 'success'], Response::HTTP_OK);
+                } else {
+                    return response()->json(['message' => 'فشلت عملية التعديل' ,'style' => 'error'], Response::HTTP_BAD_REQUEST);
+                }
 
 
-
-
-        if ($request->has('img')){
-
-            //delete old image if exist
-            if (Storage::disk('public')->exists("category/$category->img")) {
-                Storage::disk('public')->delete("category/$category->img");
-            }
-
-            // receive and store new image
-            $img = $request->file('img');
-            $imgName = time().$request->name . '.'. $img->getClientOriginalExtension();
-            $request->file('img')->storePubliclyAs('category' ,$imgName , ['disk' => 'public']);
-             $request->img = $imgName;
-        }
-
-
-        $updated =  $category->update([
-            'name' => $request->name ,
-            'img' => $request->img? $request->img : $category->img  ,
-            'is_active' => $request->is_active ? $request->is_active:0
-        ]);
-        if ($updated){
-            session()->flash('msg' , 'updated Successfully');
-            session()->flash('style' , 'info');
         }else{
-            session()->flash('msg' , 'fail updating ');
-            session()->flash('style' , 'danger');
-        }
-        return redirect()->route('category.index');
-    }
+            return response()->json(['message'=>$validator->getMessageBag()->get('name')[0] , 'style'=>'error'],Response::HTTP_OK);
 
+        }
+
+
+
+    }
     /**
      * Remove the specified resource from storage.
      */
@@ -128,11 +140,9 @@ class CategoryController extends Controller
         $deleted = $category->delete();
         if ($deleted) {
             return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
-
         }
         else {
             return response()->json(['message'=>'فشلت عملية الحذف'],Response::HTTP_BAD_REQUEST);
-
         }
 
     }

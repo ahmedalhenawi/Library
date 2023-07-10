@@ -12,17 +12,17 @@ class Category extends Model
         protected $fillable = ['name','img' , 'is_active'];
 
     public function getIsActiveAttribute($value){
-        if($value  ){
-            return 'active';
-        }else{
-            return 'non-avtive';
-        }
+
+        return $value ? 'Active':'non-active';
+
     }
 
     public function books(){
         return $this->hasMany(Book::class);
     }
 
-
+    public function subCategory(){
+        return $this->hasMany(subCategory::class);
+    }
 
 }

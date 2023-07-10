@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{asset('cms/dist/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
+    @yield('style')
 </head>
 <!--
 `body` tag options:
@@ -248,16 +248,39 @@
                     </li>
 
 
-
-                    <li class="nav-item menu-open">
-                        <a href="#" class="nav-link active">
-                            <i class="fa fa-braille" aria-hidden="true"></i>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="right fas fa-angle-left"></i>
                             <p>
-                                Book
+                                Sub Category
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{route('subCategory.index')}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Show All Sub Categoires</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('subCategory.create')}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Add Sub Categories</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="right fas fa-angle-left"></i>
+                                Book
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{route('book.index')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -352,10 +375,11 @@
 <script src="{{asset('cms/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('cms/dist/js/pages/dashboard3.js')}}"></script>
+<script src="{{asset('js/sweet-alert2.js')}}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{--<script src="{{asset('cms/plugins/sweet-alert2/sweet-alert.js')}}"></script>--}}
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{{--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>--}}
 @yield('scripts')
 </body>
 </html>

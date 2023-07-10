@@ -34,7 +34,7 @@ class CategoryRequest extends FormRequest
 
         if ($this->hasFile('img')) {
             $imageName = time() . "" . '.' . $this->file('img')->getClientOriginalExtension();
-            $this->file('img')->storePubliclyAs('People', $imageName, ['disk' => 'public']);
+            $this->file('img')->storePubliclyAs('category', $imageName, ['disk' => 'public']);
             $data['img'] = 'Category/' . $imageName;
         }
         return $data;

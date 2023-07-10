@@ -42,18 +42,12 @@
                         <label for="exampleInputEmail1">name</label>
                         <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="exampleInputEmail1" placeholder="Enter Name">
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputFile">File input</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="exampleInputFile" name="img">
-                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                            </div>
-                            <div class="input-group-append">
-                                <span class="input-group-text">Upload</span>
-                            </div>
-                        </div>
-                    </div>
+
+                     <div class="mb-3">
+                         <label for="cover" class="form-label">image</label>
+                         <input class="form-control" type="file" id="img" name="img" >
+                     </div>
+
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="is_active" name="is_active"  >
 
@@ -82,6 +76,9 @@
 
 <script>
 function create(){
+
+
+
         const myForm = document.getElementById('my-form');
         const formData = new FormData(myForm);
         formData.append('is_active', document.getElementById('is_active').checked);
@@ -89,15 +86,24 @@ function create(){
 
 
 
+
         axios.post('{{ route('category.store') }}', formData)
         .then(function(response) {
-              swal(response.data.message);
+            Swal.fire({
+                icon: response.data.style,
+                title: 'Oops...',
+                text: response.data.message,
+            })
               document.getElementById('my-form').reset();
 
          })
         .catch(function(error) {
             console.log(error);
-            swal(error.response.data.message);
+            Swal.fire({
+                icon: error.response.data.style,
+                title: 'Oops...',
+                text: error.response.data.message,
+            })
 
 
 

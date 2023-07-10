@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,7 @@ Route::get('/', function () {
 
 Route::resources([
     'category' => CategoryController::class,
+    'subCategory' => SubCategoryController::class,
     'book' => BookController::class,
 ]);
 //
