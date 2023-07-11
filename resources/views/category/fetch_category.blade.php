@@ -1,4 +1,4 @@
-<tr>
+<tr id="{{$data->id}}">
     <td>{{$data->id}}</td>
     <td>{{$data->name}}</td>
     <td><img src="{{Storage::url('category/'.$data->img)}}" alt="category image" height="40px" width="40px"></td>

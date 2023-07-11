@@ -88,7 +88,6 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $request->is_active = $request->is_active?1:0;
 
         $validator = Validator($request->all(), [
             'name' => 'required',
@@ -110,7 +109,8 @@ class CategoryController extends Controller
                 $request->img = $imgName;
                   }
 
-                $updated = $category->update([
+
+            $updated = $category->update([
                     'name'=>$request->name,
                     'img'=>$request->img?$request->img:$category->img,
                     'is_active'=>$request->is_active,

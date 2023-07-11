@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('header' , 'Category')
+@section('title' , 'SubCategory')
 
 @section('content')
     <div class="col-12 col-md-10">
@@ -66,6 +66,8 @@
                                     `${response.data.message}`,
                                     'success'
                                 )
+                                document.getElementById(id).remove();
+
                             })
                             .catch(function(error) {
                                 Swal.fire(

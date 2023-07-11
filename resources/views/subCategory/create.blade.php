@@ -18,9 +18,9 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h3>Create new category</h3>
+                    <h3>Create new sub category</h3>
                 </div>
-                 <a href="{{ route('subCategory.index') }}" class="btn btn-dark px-5">show categories</a>
+                 <a href="{{ route('subCategory.index') }}" class="btn btn-dark px-5">show sub categories</a>
             </div>
 
                 <ul>
@@ -41,8 +41,8 @@
 
                  <div class="card-body">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">name</label>
-                        <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="exampleInputEmail1" placeholder="Enter Name">
+                        <label for="name">name</label>
+                        <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="name" placeholder="Enter Name">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputFile">File input</label>
@@ -103,20 +103,33 @@
 function create(){
         const myForm = document.getElementById('my-form');
         const formData = new FormData(myForm);
-        formData.append('is_active', document.getElementById('is_active').checked);
+        formData.append('is_active', document.getElementById('is_active').checked?1:0);
 
 
 
 
         axios.post('{{ route('subCategory.store') }}', formData)
         .then(function(response) {
-              swal(response.data.message);
-              document.getElementById('my-form').reset();
+            Swal.fire({
+                position: 'top-end',
+                icon: response.data.style,
+                title: response.data.message,
+                showConfirmButton: false,
+                timer: 5500
+            })
+
+            document.getElementById('my-form').reset();
 
          })
         .catch(function(error) {
             console.log(error);
-            swal(error.response.data.message);
+            Swal.fire({
+                position: 'top-end',
+                icon: response.data.style,
+                title: response.data.message,
+                showConfirmButton: false,
+                timer: 5500
+            })
 
 
 

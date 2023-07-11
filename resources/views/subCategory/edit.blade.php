@@ -16,9 +16,9 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3>update category</h3>
+                <h3>update sub category</h3>
             </div>
-            <a href="{{ route('category.index') }}" class="btn btn-dark px-5">show categories</a>
+            <a href="{{ route('subCategory.index') }}" class="btn btn-dark px-5">show sub categories</a>
         </div>
 
         <ul>
@@ -40,7 +40,7 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="name">name</label>
-                    <input type="text" class="form-control" name="name"  value="{{$category->name}}" id="name" placeholder="Enter Name">
+                    <input type="text" class="form-control" name="name"  value="{{$subCategory->name}}" id="name" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputFile">File input</label>
@@ -54,15 +54,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" @checked($category->is_active == 'active') id="is_active" name="is_active" value="{{true}}">
+
+                <select class="form-control select2 select2-hidden-accessible" name="category_id" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+
+                    @forelse($categories as $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+
+                    @empty
+                        <option disabled> no categories exists</option>
+                    @endforelse
+
+                </select>
+
+                <div class="form-check mt-2">
+                    <input type="checkbox" class="form-check-input" @checked($subCategory->is_active == 'Active') id="is_active" name="is_active" value="{{true}}">
                     <label class="form-check-label" for="is_active">Status</label>
                 </div>
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="button" onclick="updating({{$category->id}})" class="btn btn-primary">Submit</button>
+                <button type="button" onclick="updating({{$subCategory->id}})" class="btn btn-primary">Submit</button>
             </div>
         </form>
 
@@ -81,26 +93,45 @@
 
 
     <script>
-         function updating(category_id){
+
+
+        function updating(id){
 
             const myForm = document.getElementById('my-form');
             const formData = new FormData(myForm);
-            console.log(category_id);
-            formData.append('name' , document.getElementById('name').value)
-            formData.append('_method' , 'PUT');
-            formData.append('is_active', document.getElementById('is_active').checked);
-            if(document.getElementById('img').files[0] !== undefined){
-                    formData.append('img' , document.getElementById('img').files[0])
-            }
-            axios.post(`/category/${category_id}`, formData)
-                .then(function(response) {
-                    swal(response.data.message);
-                    // document.getElementById('my-form').reset();
-                })
-                .catch(function(error) {
-                    // console.log(error);
-                    swal('error');
-                });
+            formData.append('is_active', (document.getElementById('is_active').checked)?1:0);
+            formData.append('_method', 'put');
+
+            // for (var pair of formData.entries()) {
+            //     console.log(pair[0]+ ', ' + pair[1]);
+            // }
+
+
+            Swal.fire({
+                title: 'Do you want to save the changes?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                denyButtonText: `Don't save`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    axios.post("{{route('subCategory.update', ['subCategory'=> $subCategory->id])}}", formData)
+                        .then(function(response) {
+                            Swal.fire('Saved!', `${response.data.message}`, `${response.data.style}`)
+                            // document.getElementById('my-form').reset();
+                        })
+                        .catch(function(error) {
+                            // console.log(error);
+                            Swal.fire('not Saved!', `${error.response.data.message}`, `${error.response.data.style}`)
+                        });
+
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+
         }
 
 
