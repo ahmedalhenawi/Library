@@ -34,13 +34,13 @@
             </thead>
             <tbody>
                 @forelse($books as $book)
-                    <tr>
+                    <tr id="{{$book->id}}">
                     <td>{{$book->id}}</td>
                     <td>{{$book->name}}</td>
                     <td>{{$book->author_name}}</td>
 
 
-                    <td>{{$book->category->name}}</td>
+                    <td>{{$book->subCategory->name}}</td>
 {{--                    <td>{{\App\Models\Category::find($book->category_id)->name}}</td>--}}
 
 
@@ -52,7 +52,7 @@
 {{--                            @method('delete')--}}
 {{--                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="confirm('are you sure to delete this')" >Delete</button>--}}
 {{--                        </form>--}}
-                        <a href="#" class="btn btn-outline-danger btn-sm delete" data-id="{{$book->id}}">DELETE</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm delete" onclick="deleting({{$book->id}})">DELETE</a>
                         <a href="{{route('book.edit' ,  ['book'=>$book->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>
                     </td>
 
@@ -69,31 +69,48 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
 
 
-        $('.delete').click(function () {
-            var id = $(this).attr('data-id');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this imaginary file!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        window.location = `/book/delete/${id}`;
-                        swal("Poof! Your imaginary file has been deleted!", {
-                            icon: "success",
-                        });
-                    } else {
-                        swal("Your imaginary file is safe!");
-                    }
-                });
+        function deleting(id){
 
-        });
+
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`{{ route('book.destroy' , ['book'=>$book->id ])}}`)
+                        .then(function(response) {
+                            Swal.fire(
+                                'Deleted!',
+                                `${response.data.message}`,
+                                'success'
+                            )
+                            document.getElementById(id).remove();
+
+                        })
+                        .catch(function(error) {
+                            Swal.fire(
+                                'ERROR',
+                                `${error.response.data.message}`,
+                                // 'هذا الصنف مرتبط بمجموعة كتب' ,
+                                'error'
+                            )
+
+                        });
+                }
+            });
+        }
+
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Models\subCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -61,7 +62,7 @@ class CategoryController extends Controller
 
 
         }else{
-            return response()->json(['message'=>$validator->getMessageBag()->get('name')[0] , 'style'=>'error'],Response::HTTP_OK);
+            return response()->json(['message'=>$validator->errors()->first()],Response::HTTP_OK);
 
         }
 
@@ -72,6 +73,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
+        $subCategories =  $category->subCategories()->where('is_active' , 1)->get();
+        return response()->json(['subCategories'=>$subCategories], Response::HTTP_OK);
 
     }
 
@@ -109,7 +112,6 @@ class CategoryController extends Controller
                 $request->img = $imgName;
                   }
 
-
             $updated = $category->update([
                     'name'=>$request->name,
                     'img'=>$request->img?$request->img:$category->img,
@@ -124,7 +126,7 @@ class CategoryController extends Controller
 
 
         }else{
-            return response()->json(['message'=>$validator->getMessageBag()->get('name')[0] , 'style'=>'error'],Response::HTTP_OK);
+            return response()->json(['message'=>$validator->errors()->first() , 'style'=>'error'],Response::HTTP_OK);
 
         }
 
@@ -147,25 +149,6 @@ class CategoryController extends Controller
 
     }
 
-//    public function delete($id)
-//    {
-//        $category = Category::find($id);
-//        if (Storage::disk('public')->exists("category/$category->img")) {
-//            Storage::disk('public')->delete("category/$category->img");
-//        }
-//        $deleted = $category->delete();
-//
-//        if ($deleted){
-//            return response()->json(['message'=>'تمت العملية بنجاح'],Response::HTTP_OK);
-//        }
 
-//        if($deleted){
-//            session()->flash('msg' , 'deleted Successfully');
-//            session()->flash('style' , 'danger');
-//        }else{
-//            session()->flash('msg' , 'fail deleting ');
-//            session()->flash('style' , 'danger');
-//        }
-//        return redirect()->route('category.index');
 
 }

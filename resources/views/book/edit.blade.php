@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('title' , 'Edit Book')
+@section('title' , 'Add Book')
 @section('content')
 
 
@@ -16,9 +16,9 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3>Create new Book</h3>
+                <h3>Create new category</h3>
             </div>
-            <a href="{{ route('book.index') }}" class="btn btn-dark px-5">Show Books</a>
+            <a href="{{ route('book.index') }}" class="btn btn-dark px-5">show Book</a>
         </div>
 
         <ul>
@@ -35,47 +35,72 @@
         {{--                <a href="{{route('category.index')}}" class=" btn btn-primary" >show all Categories</a>--}}
 
 
-        <form action="{{route('book.update' , ['book' => $book->id] ) }}" method="POST">
+        <form id="my-form" enctype="multipart/form-data">
             @csrf
-            @method('put')
-            {{--            id	name	author_name	description	category_id	publication_at	created_at	updated_at--}}
+{{--            id	name	author_name	description	category_id	publication_at	created_at	updated_at--}}
             <div class="card-body">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">name</label>
-                    <input type="text" class="form-control" name="name" value="{{old('name')?old('name'): $book->name }}" id="exampleInputEmail1" placeholder="Enter Name">
+                    <label for="name">name</label>
+                    <input type="text" class="form-control" name="name" value="{{$book->name}}" id="name" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">author_name</label>
-                    <input type="text" class="form-control" name="author_name" value="{{old('author_name')?old('author_name'): $book->author_name }}" id="exampleInputEmail1" placeholder="author_name">
+                    <label for="author_name">author_name</label>
+                    <input type="text" class="form-control" name="author_name" value="{{$book->author_name}}" id="author_name" placeholder="author_name">
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1">description</label>
-                    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{old('description')?old('description'): $book->description }}</textarea>
+                    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{$book->description}}</textarea>
                 </div>
                 <div class="form-group">
                     <label>publication_at:</label>
-                    <input type="text" class="form-control datepicker"  name="publication_at" value="{{old('publication_at')?old('publication_at'): $book->publication_at }}">
+                        <input type="text" class="form-control datepicker" value="{{$book->publication_at}}" name="publication_at" >
                 </div>
 
-                <div class="form-group" data-select2-id="29">
-                    <label>Minimal</label>
-                    <select class="form-control select2 select2-hidden-accessible" name="category_id" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
 
+
+
+                    {{--        select categpry         --}}
+
+                <div class="form-group" data-select2-id="29">
+                    <label>Category</label>
+                    <select class="form-control select2 select2-hidden-accessible"  style="width: 100%;" id="my-select" onchange="updateSub()">
+                        <option selected disabled>Choose Category</option>
                         @forelse($categories as $category)
-                            <option @selected($category->name == $book->category_id) value="{{$category->id}}">{{$category->name}}</option>
+                            <option @selected($book->subCategory->category->id == $category->id ) value="{{$category->id}}">{{$category->name}}</option>
 
                         @empty
                             <option disabled> no categories exists</option>
                         @endforelse
 
+
+
                     </select>
 
                 </div>
+
+
+
+                <div class="form-group" data-select2-id="29">
+                    <label>Sub Category</label>
+                    <select class="form-control select2 select2-hidden-accessible" name="sub_category_id" style="width: 100%;" id="select-sub">
+                    <option>-----</option>
+{{--                @forelse($subCategories as $category)--}}
+{{--                    <option value="{{$category->id}}">{{$category->name}}</option>--}}
+
+{{--                @empty--}}
+{{--                    <option disabled> no categories exists</option>--}}
+{{--                @endforelse--}}
+                    </select>
+
+                </div>
+
+
+
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" onclick="updateItem()" class="btn btn-primary">Submit</button>
             </div>
         </form>
 
@@ -90,9 +115,85 @@
 
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
         $('.datepicker').datepicker();
+    </script>
+
+    <script>
+        function updateSub() {
+            var selectElement = document.querySelector("#my-select");
+            var selectedValue = selectElement.value;
+            let select = document.querySelector('#select-sub');
+
+            // remove last options if exist
+            select.innerHTML = "";
+            console.log(selectedValue);
+            axios.get(`/category/${selectedValue}`)
+                .then(function (response){
+                    let res = response.data.subCategories;
+                    res.forEach(function (item){
+                        let name = item['name'];
+                        let id = item['id'];
+                        let option = document.createElement('option');
+                        option.setAttribute('value', id);
+                        // option.setAttribute('name', name);
+                        option.innerText = name;
+                        select.appendChild(option);
+                        console.log(option);
+                    });
+                }).catch(function (error){
+                })
+        }
+
+
+
+        var selectElement = document.getElementById("mySelect");
+        selectElement.selectedIndex = selectElement.selectedIndex;
+
+        function updateItem(){
+
+            const myForm = document.getElementById('my-form');
+            const formData = new FormData(myForm);
+            formData.append('_method', 'put');
+
+            // for (var pair of formData.entries()) {
+            //     console.log(pair[0]+ ', ' + pair[1]);
+            // }
+
+
+            Swal.fire({
+                title: 'Do you want to save the changes?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                denyButtonText: `Don't save`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    axios.post("{{route('book.update', ['book'=> $book->id])}}", formData)
+                        .then(function(response) {
+                            Swal.fire('Saved!', `${response.data.message}`, `${response.data.style}`)
+                            // document.getElementById('my-form').reset();
+                        })
+                        .catch(function(error) {
+                            // console.log(error);
+                            Swal.fire('not Saved!', `${error.response.data.message}`, `${error.response.data.style}`)
+                        });
+
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+
+        }
+
+
+
+
+
     </script>
 
 @endsection

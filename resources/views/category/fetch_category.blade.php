@@ -2,7 +2,7 @@
     <td>{{$data->id}}</td>
     <td>{{$data->name}}</td>
     <td><img src="{{Storage::url('category/'.$data->img)}}" alt="category image" height="40px" width="40px"></td>
-    <td><span class="btn {{$data->is_active == 'Active'?'btn-success': 'btn-danger'}}">{{$data->is_active}}</span></td>
+    <td><span class="{{$data->is_active == 'Active'?'badge badge-success': 'badge badge-danger'}}">{{$data->is_active}}</span></td>
     <td>
 {{--        <form method="POST" action="{{route('category.destroy' , ['category' =>$data->id ])}}"  class="d-inline" >--}}
 {{--            @csrf--}}

@@ -11,12 +11,12 @@ class Book extends Model
     protected $fillable = [ 'name',
                             'author_name',
                             'description',
-                            'category_id',
+                            'sub_category_id',
                             'publication_at'];
 
 
-    public function category(){
-        return $this->belongsTo(Category::class);
+    public function subCategory(){
+        return $this->belongsTo(subCategory::class);
     }
 
 }

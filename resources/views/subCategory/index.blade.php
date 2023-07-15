@@ -36,7 +36,7 @@
                 <td>{{$subCategory->id}}</td>
                 <td>{{$subCategory->name}}</td>
                 <td><img src="{{Storage::url('subCategory/'.$subCategory->img)}}" alt="category image" height="40px" width="40px"></td>
-                <td><span class="btn {{$subCategory->is_active == 'Active'?'btn-success': 'btn-danger'}}">{{$subCategory->is_active}}</span></td>
+                <td><span class="{{$subCategory->is_active == 'Active'?'badge badge-success': 'badge badge-danger'}}">{{$subCategory->is_active}}</span></td>
                             <td>{{$subCategory->category->name}}</td>
                 <td>
                     <button onclick="deleting( {{$subCategory->id}})" class="btn btn-outline-danger btn-sm">Delete</button>

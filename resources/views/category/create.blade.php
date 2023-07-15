@@ -77,9 +77,7 @@
 <script>
 function create(){
 
-
-
-        const myForm = document.getElementById('my-form');
+     const myForm = document.getElementById('my-form');
         const formData = new FormData(myForm);
         formData.append('is_active', document.getElementById('is_active').checked);
 
@@ -104,10 +102,8 @@ function create(){
                 title: 'Oops...',
                 text: error.response.data.message,
             })
-
-
-
         });
+
         }
 
 

@@ -40,8 +40,7 @@ class SubCategoryController extends Controller
             'name' => 'required',
             'is_active' => 'required | in:1,0',
             'img' => 'required|mimes:png,jpg',
-            'category_id' => 'required'
-//            'category_id' => ['required',Rule::exists('category', 'id')]
+            'category_id' => ['required' ,Rule::exists('categories', 'id') ]
         ]);
 
         if (!$validator->fails()){
@@ -58,7 +57,7 @@ class SubCategoryController extends Controller
             ]);
             return response()->json(['message'=>$created?'تمت عملية الاضافة بنجاح' : "فشلت عملية الاضافة" , 'style'=> $created?'success':'error'] , $created ?Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
         }else{
-            return response()->json(['message'=>$validator->getMessageBag()->get('name')[0] , 'style'=>'error'],Response::HTTP_OK);
+            return response()->json(['message'=>$validator->errors()->first() , 'style'=>'error'],Response::HTTP_OK);
         }
     }
 
@@ -67,7 +66,8 @@ class SubCategoryController extends Controller
      */
     public function show(subCategory $subCategory)
     {
-        //
+        dd(123);
+
     }
 
     /**
@@ -87,7 +87,8 @@ class SubCategoryController extends Controller
         $validator = Validator($request->all(), [
             'name' => 'required',
             'img' => 'mimes:png,jpg',
-            'is_active' => 'required|string|in:true,false,1,0'
+            'is_active' => 'required|string|in:true,false,1,0',
+            'category_id' => ['required' ,Rule::exists('categories', 'id') ]
         ]);
         if (!$validator->fails()) {
 
@@ -120,7 +121,8 @@ class SubCategoryController extends Controller
 
 
         }else{
-            return response()->json(['message'=>$validator->getMessageBag()->get('name')[0] , 'style'=>'error'],Response::HTTP_OK);
+            dd($validator->errors()->first());
+            return response()->json(['message'=>$validator->errors()->first(), 'style'=>'error'],Response::HTTP_OK);
 
         }
 

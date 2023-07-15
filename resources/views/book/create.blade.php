@@ -35,7 +35,7 @@
         {{--                <a href="{{route('category.index')}}" class=" btn btn-primary" >show all Categories</a>--}}
 
 
-        <form action="{{route('book.store')}}" method="POST" enctype="multipart/form-data">
+        <form id="my-form" enctype="multipart/form-data">
             @csrf
 {{--            id	name	author_name	description	category_id	publication_at	created_at	updated_at--}}
             <div class="card-body">
@@ -53,13 +53,18 @@
                 </div>
                 <div class="form-group">
                     <label>publication_at:</label>
-                        <input type="text" class="form-control datepicker"  name="publication_at" value="02-16-2012">
+                        <input type="text" class="form-control datepicker"  name="publication_at" >
                 </div>
 
-                <div class="form-group" data-select2-id="29">
-                    <label>Minimal</label>
-                    <select class="form-control select2 select2-hidden-accessible" name="category_id" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
 
+
+
+                    {{--        select categpry         --}}
+
+                <div class="form-group" data-select2-id="29">
+                    <label>Category</label>
+                    <select class="form-control select2 select2-hidden-accessible"  style="width: 100%;" id="my-select" onchange="updateSub()">
+                        <option selected disabled>Choose Category</option>
                         @forelse($categories as $category)
                             <option value="{{$category->id}}">{{$category->name}}</option>
 
@@ -67,14 +72,35 @@
                             <option disabled> no categories exists</option>
                         @endforelse
 
+
+
                     </select>
 
                 </div>
+
+
+
+                <div class="form-group" data-select2-id="29">
+                    <label>Sub Category</label>
+                    <select class="form-control select2 select2-hidden-accessible" name="sub_category_id" style="width: 100%;" id="select-sub">
+                    <option>-----</option>
+{{--                @forelse($subCategories as $category)--}}
+{{--                    <option value="{{$category->id}}">{{$category->name}}</option>--}}
+
+{{--                @empty--}}
+{{--                    <option disabled> no categories exists</option>--}}
+{{--                @endforelse--}}
+                    </select>
+
+                </div>
+
+
+
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" onclick="createItem()" class="btn btn-primary">Submit</button>
             </div>
         </form>
 
@@ -89,9 +115,71 @@
 
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
         $('.datepicker').datepicker();
+    </script>
+
+    <script>
+        function updateSub() {
+            var selectElement = document.querySelector("#my-select");
+            var selectedValue = selectElement.value;
+            let select = document.querySelector('#select-sub');
+
+            // remove last options if exist
+            select.innerHTML = "";
+            console.log(selectedValue);
+            axios.get(`/category/${selectedValue}`)
+                .then(function (response){
+                    let res = response.data.subCategories;
+                    res.forEach(function (item){
+                        let name = item['name'];
+                        let id = item['id'];
+                        let option = document.createElement('option');
+                        option.setAttribute('value', id);
+                        // option.setAttribute('name', name);
+                        option.innerText = name;
+                        select.appendChild(option);
+                        console.log(option);
+                    });
+                }).catch(function (error){
+                })
+        }
+
+
+
+
+        function createItem(){
+            myForm = document.querySelector('#my-form');
+            console.log(myForm);
+            const formData = new FormData(myForm)
+
+            axios.post('{{ route('book.store') }}', formData)
+                .then(function(response) {
+                    Swal.fire({
+                        icon: response.data.style,
+                        title: 'Oops...',
+                        text: response.data.message,
+                    })
+                    document.getElementById('my-form').reset();
+
+                })
+                .catch(function(error) {
+                    console.log(error);
+                    Swal.fire({
+                        icon: error.response.data.style,
+                        title: 'Oops...',
+                        text: error.response.data.message,
+                    })
+                });
+
+        }
+
+
+
+
+
     </script>
 
 @endsection

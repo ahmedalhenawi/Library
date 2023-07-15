@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('author_name');
             $table->text('description');
-            $table->foreignId('category_id')->constrained('categories');
+//            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('sub_category_id')->constrained('sub_categories')->cascadeOnDelete();
             $table->date('publication_at');
             $table->timestamps();
         });
