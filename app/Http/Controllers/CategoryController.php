@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+//use Yajra\DataTables\DataTables;
+//use DataTables;
+use Yajra\DataTables\Facades\DataTables;
+
 use function Termwind\style;
 
 class CategoryController extends Controller
@@ -17,13 +21,89 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      */
     private $columns = ['name' , 'is_active', 'img'];
-    public function index()
-    {
 
-        $categories = Category::paginate(2);
-        return view('category.index',compact('categories'));
+
+
+
+
+
+  public function index(){
+
+      $categories = Category::get();
+      return view('category.index' , compact('categories'));
+
+  }
+
+
+
+    public function fetch_all(){
+        $data  = Category::select('*');
+        return Datatables::of($data)->addIndexColumn()
+                                    ->addColumn('action' , function ($row){
+                                        return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
+                                                       <button onclick='deleting($row->id)' class='btn btn-outline-danger'>Delete</button>";
+
+                                   })->addColumn('img', function ($category) {
+                                       return '<img src="'.Storage::url("category/$category->img").'" alt="category image" height="40px" width="40px">';
+                                   })
+
+                        ->rawColumns([ 'img' , 'action'])
+                        ->make(true);
 
     }
+
+    public function getDataTables()
+    {
+
+        return view('category.index');
+//        $data = Category::select('*');
+//
+//        return  Datatables::of($data)
+//            ->addIndexColumn()
+//            ->addColumn('action', function ($row) {
+//                $btn = '';
+//                if (auth()->user()->can('update', $row)) {
+//                    $btn .= '<a href="' . Route('dashboard.users.edit', $row->id) . '"  class="edit btn btn-success btn-sm" ><i class="fa fa-edit"></i></a>';
+//                }
+//                if (auth()->user()->can('delete', $row)) {
+//                    $btn .= '
+//
+//                        <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm"  data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>';
+//                }
+//                return $btn;
+//            })
+//            ->addColumn('status', function ($row) {
+//                return $row->status == null ? __('words.not activated') : __('words.' . $row->status);
+//            })
+//            ->rawColumns(['action', 'status'])
+//            ->make(true);
+
+    }
+//
+//        function fetch_all(Request $request){
+//                if($request->ajax()){
+//                    $data  = Category::select('*');
+//                            return  Datatables::of($data)
+//            ->addIndexColumn()
+//            ->addColumn('action', function ($row) {
+//                $btn = '';
+//                if (auth()->user()->can('update', $row)) {
+//                    $btn .= '<a href="' . Route('dashboard.users.edit', $row->id) . '"  class="edit btn btn-success btn-sm" ><i class="fa fa-edit"></i></a>';
+//                }
+//                if (auth()->user()->can('delete', $row)) {
+//                    $btn .= '
+//
+//                        <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm"  data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>';
+//                }
+//                return $btn;
+//            })
+//            ->addColumn('status', function ($row) {
+//                return $row->status == null ? __('words.not activated') : __('words.' . $row->status);
+//            })
+//            ->rawColumns(['action', 'status'])
+//            ->make(true);
+//                }
+//        }
 
     /**
      * Show the form for creating a new resource.
@@ -138,6 +218,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+
+         $acceptDelete = $category->subCategories ;
 
         $deleted = $category->delete();
         if ($deleted) {

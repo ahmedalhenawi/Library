@@ -381,5 +381,6 @@
 {{--<script src="{{asset('cms/plugins/sweet-alert2/sweet-alert.js')}}"></script>--}}
 {{--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>--}}
 @yield('scripts')
+@stack('scripts')
 </body>
 </html>
