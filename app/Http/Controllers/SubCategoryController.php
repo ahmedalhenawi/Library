@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\Facades\DataTables;
 
 class SubCategoryController extends Controller
 {
@@ -17,9 +18,38 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        $subCategories = subCategory::with('category')->paginate(2);
-        return view('subCategory.index' , compact('subCategories'));
+        return view('subCategory.index');
     }
+
+
+    public function fetch_all(){
+        $data  = subCategory::with('category')->get();
+        return Datatables::of($data)->addIndexColumn()
+            ->addColumn('action' , function ($row){
+                return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
+                                                       <button onclick='deleting($row->id)' class='btn btn-outline-danger'>Delete</button>";
+
+            })->addColumn('img', function ($category) {
+                return '<img src="'.Storage::url("subCategory/$category->img").'" alt="category image" height="40px" width="40px">';
+            })->addColumn('is_active', function ($subCategory) {
+
+                if ($subCategory->is_active == "Active"){
+                    return "<span class = 'badge badge-success'>$subCategory->is_active</span>";
+                }else{
+                    return "<span class = 'badge badge-danger'>$subCategory->is_active</span>";
+
+                }
+
+            })->addColumn('parent_name' , function ($subCategory){
+                return  $subCategory->category->name;
+            })
+
+            ->rawColumns(['is_active', 'img' , 'parent_name' , 'action'])
+            ->make(true);
+
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

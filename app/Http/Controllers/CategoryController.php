@@ -27,28 +27,37 @@ class CategoryController extends Controller
 
 
 
-  public function index(){
+    public function index(){
 
-      $categories = Category::get();
-      return view('category.index' , compact('categories'));
+        $categories = Category::get();
+        return view('category.index' , compact('categories'));
 
-  }
+    }
 
 
 
     public function fetch_all(){
         $data  = Category::select('*');
         return Datatables::of($data)->addIndexColumn()
-                                    ->addColumn('action' , function ($row){
-                                        return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
+            ->addColumn('action' , function ($row){
+                return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
                                                        <button onclick='deleting($row->id)' class='btn btn-outline-danger'>Delete</button>";
 
-                                   })->addColumn('img', function ($category) {
-                                       return '<img src="'.Storage::url("category/$category->img").'" alt="category image" height="40px" width="40px">';
-                                   })
+            })->addColumn('img', function ($category) {
+                return '<img src="'.Storage::url("category/$category->img").'" alt="category image" height="40px" width="40px">';
+            })->addColumn('is_active', function ($subCategory) {
 
-                        ->rawColumns([ 'img' , 'action'])
-                        ->make(true);
+                if ($subCategory->is_active == "Active"){
+                    return "<span class = 'badge badge-success'>$subCategory->is_active</span>";
+                }else{
+                    return "<span class = 'badge badge-danger'>$subCategory->is_active</span>";
+
+                }
+
+            })
+
+            ->rawColumns(['is_active', 'img' , 'action'])
+            ->make(true);
 
     }
 

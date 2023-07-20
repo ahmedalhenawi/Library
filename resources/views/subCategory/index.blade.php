@@ -1,6 +1,10 @@
 @extends('dashboard')
 
-@section('header' , 'Category')
+@section('title' , 'sub Category')
+
+@section('style')
+    <link rel="stylesheet" href="{{asset('css/datatable.css')}}">
+@endsection
 
 @section('content')
     <div class="col-12 col-md-10">
@@ -18,39 +22,39 @@
             {{session('msg')}}
         </div>
     @endif
-    <table class="table">
+    <table class="table" id="table_id">
         <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">name</th>
             <th scope="col">image</th>
             <th scope="col">status</th>
-            <th scope="col">parent name</th>
+            <th scope="col">parent_name</th>
             <th scope="col">actions</th>
         </tr>
         </thead>
         <tbody>
 
-        @forelse($subCategories as $subCategory)
-            <tr id="{{$subCategory->id}}">
-                <td>{{$subCategory->id}}</td>
-                <td>{{$subCategory->name}}</td>
-                <td><img src="{{Storage::url('subCategory/'.$subCategory->img)}}" alt="category image" height="40px" width="40px"></td>
-                <td><span class="{{$subCategory->is_active == 'Active'?'badge badge-success': 'badge badge-danger'}}">{{$subCategory->is_active}}</span></td>
-                            <td>{{$subCategory->category->name}}</td>
-                <td>
-                    <button onclick="deleting( {{$subCategory->id}})" class="btn btn-outline-danger btn-sm">Delete</button>
+{{--        @forelse($subCategories as $subCategory)--}}
+{{--            <tr id="{{$subCategory->id}}">--}}
+{{--                <td>{{$subCategory->id}}</td>--}}
+{{--                <td>{{$subCategory->name}}</td>--}}
+{{--                <td><img src="{{Storage::url('subCategory/'.$subCategory->img)}}" alt="category image" height="40px" width="40px"></td>--}}
+{{--                <td><span class="{{$subCategory->is_active == 'Active'?'badge badge-success': 'badge badge-danger'}}">{{$subCategory->is_active}}</span></td>--}}
+{{--                            <td>{{$subCategory->category->name}}</td>--}}
+{{--                <td>--}}
+{{--                    <button onclick="deleting( {{$subCategory->id}})" class="btn btn-outline-danger btn-sm">Delete</button>--}}
 
-                    <a href="{{route('subCategory.edit' ,  ['subCategory'=>$subCategory->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>
-                </td>
-            </tr>
-        @empty
-            <td rowspan="5"><center>no data found</center> </td>
-        @endforelse
+{{--                    <a href="{{route('subCategory.edit' ,  ['subCategory'=>$subCategory->id])}}" class="btn btn-outline-primary btn-sm">Edit</a>--}}
+{{--                </td>--}}
+{{--            </tr>--}}
+{{--        @empty--}}
+{{--            <td rowspan="5"><center>no data found</center> </td>--}}
+{{--        @endforelse--}}
 
         </tbody>
     </table>
-        {{$subCategories->links()}}
+{{--        {{$subCategories->links()}}--}}
     </div>
 
 
@@ -58,6 +62,8 @@
 
 @section('scripts')
 
+    <script src="{{asset('js/datatable.js')}}"></script>
+    <script src="{{asset('js/jquery-datatable.js')}}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -104,3 +110,73 @@
 
 
 @endsection
+
+
+@push('scripts')
+
+
+
+
+    <script>
+
+        $(function() {
+
+
+            var table = $('#table_id').DataTable({
+                processing: true,
+                serverSide: true,
+                order: [
+                    [0,'desc']
+                ],
+                ajax: "{{ route('subCategory.fetch_all') }}",
+                columns: [{
+                    data: 'id',
+                    name: 'id'
+                },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active',
+                    },
+                    {
+
+                        data: 'img',
+                        name: 'img' ,
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'parent_name',
+                        name: 'parent_name'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                    },
+                    // {
+                    //     data: 'action',
+                    //     name: 'action',
+                    //     orderable: false,
+                    //     // searchable: false
+                    //
+                    // }
+                ]
+            });
+
+        });
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+@endpush

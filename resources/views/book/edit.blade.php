@@ -83,13 +83,13 @@
                 <div class="form-group" data-select2-id="29">
                     <label>Sub Category</label>
                     <select class="form-control select2 select2-hidden-accessible" name="sub_category_id" style="width: 100%;" id="select-sub">
-                    <option>-----</option>
-{{--                @forelse($subCategories as $category)--}}
-{{--                    <option value="{{$category->id}}">{{$category->name}}</option>--}}
+                        <option>-----</option>
+                        {{--                @forelse($subCategories as $category)--}}
+                        {{--                    <option value="{{$category->id}}">{{$category->name}}</option>--}}
 
-{{--                @empty--}}
-{{--                    <option disabled> no categories exists</option>--}}
-{{--                @endforelse--}}
+                        {{--                @empty--}}
+                        {{--                    <option disabled> no categories exists</option>--}}
+                        {{--                @endforelse--}}
                     </select>
 
                 </div>
@@ -122,6 +122,10 @@
     </script>
 
     <script>
+
+        document.querySelector("#my-select").selectedIndex = {{$book->subCategory->category->id}};
+        var event = new Event('change');
+        document.querySelector("#my-select").dispatchEvent(event);
         function updateSub() {
             var selectElement = document.querySelector("#my-select");
             var selectedValue = selectElement.value;
@@ -144,7 +148,7 @@
                         console.log(option);
                     });
                 }).catch(function (error){
-                })
+            })
         }
 
 

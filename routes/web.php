@@ -33,4 +33,5 @@ Route::resources([
 //Route::get("category/delete/{id}" , [CategoryController::class , 'delete'])->name('category.delete');
 //Route::get("book/delete/{id}" , [BookController::class , 'delete']);
 
-Route::get('/fetch_all' , [CategoryController::class , 'fetch_all'])->name('category.fetch_all');
+Route::get('Category/fetch_all' , [CategoryController::class , 'fetch_all'])->name('category.fetch_all');
+Route::get('sub/fetch_all' , [SubCategoryController::class , 'fetch_all'])->name('subCategory.fetch_all');
