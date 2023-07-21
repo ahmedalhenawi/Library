@@ -23,14 +23,15 @@ class SubCategoryController extends Controller
 
 
     public function fetch_all(){
-        $data  = subCategory::with('category')->get();
+        $data  = subCategory::with('category')->select('*');
         return Datatables::of($data)->addIndexColumn()
             ->addColumn('action' , function ($row){
                 return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
                                                        <button onclick='deleting($row->id)' class='btn btn-outline-danger'>Delete</button>";
 
             })->addColumn('img', function ($category) {
-                return '<img src="'.Storage::url("subCategory/$category->img").'" alt="category image" height="40px" width="40px">';
+//                return '<img src="'.Storage::url("subCategory/$category->img").'" alt="category image" height="40px" width="40px">
+                return '<img src="'.$category->img.'" alt="category image" height="40px" width="40px">';
             })->addColumn('is_active', function ($subCategory) {
 
                 if ($subCategory->is_active == "Active"){
