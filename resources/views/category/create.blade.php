@@ -40,7 +40,7 @@
                  <div class="card-body">
                     <div class="form-group">
                         <label for="exampleInputEmail1">name</label>
-                        <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="exampleInputEmail1" placeholder="Enter Name">
+                        <input type="text" class="form-control" name="name"  id="exampleInputEmail1" placeholder="Enter Name">
                     </div>
 
                      <div class="mb-3">
@@ -92,7 +92,10 @@ function create(){
                 title: 'Oops...',
                 text: response.data.message,
             })
-              document.getElementById('my-form').reset();
+                if(response.data.style != 'error'){
+                 document.getElementById('my-form').reset();
+                }
+              // document.getElementById('my-form').reset();
 
          })
         .catch(function(error) {

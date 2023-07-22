@@ -23,7 +23,7 @@ class SubCategoryController extends Controller
 
 
     public function fetch_all(){
-        $data  = subCategory::with('category')->select('*');
+        $data  = subCategory::with('category');
         return Datatables::of($data)->addIndexColumn()
             ->addColumn('action' , function ($row){
                 return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
@@ -34,12 +34,13 @@ class SubCategoryController extends Controller
                 return '<img src="'.$category->img.'" alt="category image" height="40px" width="40px">';
             })->addColumn('is_active', function ($subCategory) {
 
-                if ($subCategory->is_active == "Active"){
-                    return "<span class = 'badge badge-success'>$subCategory->is_active</span>";
-                }else{
-                    return "<span class = 'badge badge-danger'>$subCategory->is_active</span>";
-
-                }
+                return $subCategory->is_active;
+//                if ($subCategory->is_active == "Active"){
+//                    return "<span class = 'badge badge-success'>$subCategory->is_active</span>";
+//                }else{
+//                    return "<span class = 'badge badge-danger'>$subCategory->is_active</span>";
+//
+//                }
 
             })->addColumn('parent_name' , function ($subCategory){
                 return  $subCategory->category->name;

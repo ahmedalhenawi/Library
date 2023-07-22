@@ -117,8 +117,10 @@ function create(){
                 showConfirmButton: false,
                 timer: 5500
             })
-
-            document.getElementById('my-form').reset();
+            if(response.data.style !== 'error'){
+                document.getElementById('my-form').reset();
+            }
+            // document.getElementById('my-form').reset();
 
          })
         .catch(function(error) {

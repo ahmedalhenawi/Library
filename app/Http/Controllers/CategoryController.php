@@ -151,7 +151,7 @@ class CategoryController extends Controller
 
 
         }else{
-            return response()->json(['message'=>$validator->errors()->first()],Response::HTTP_OK);
+            return response()->json(['message'=>$validator->errors()->first() , 'style'=>'error' ],Response::HTTP_OK);
 
         }
 

@@ -14,7 +14,13 @@ class subCategory extends Model
         return $this->hasMany(Book::class);
     }
     public function getIsActiveAttribute($value){
-        return $value?"Active":'non-active';
+        if ($value){
+           return "<span class = 'badge badge-success'>نشط</span>";
+        }else{
+          return  "<span class = 'badge bg-danger'>غير نشط</span>";
+
+        }
+//        return $value?"Active":'non-active';
     }
     public function category(){
         return $this->belongsTo(Category::class);
