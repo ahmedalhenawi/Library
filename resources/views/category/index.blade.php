@@ -1,3 +1,4 @@
+
 @extends('dashboard')
 
 @section('title' , 'SubCategory')
@@ -42,7 +43,7 @@
             <thead>
             <tr>
                 <th>id</th>
-                <th>name</th>
+                <th>name_{{LaravelLocalization::setLocale()}}</th>
                 <th>is_active</th>
                 <th>img</th>
                 <th>action</th>
@@ -142,8 +143,8 @@
                     name: 'id'
                 },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'name_{{LaravelLocalization::setLocale()}}',
+                        name: 'name_{{LaravelLocalization::setLocale()}}'
                     },
                     {
                         data: 'is_active',

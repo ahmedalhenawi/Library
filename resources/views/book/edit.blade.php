@@ -37,36 +37,48 @@
 
         <form id="my-form" enctype="multipart/form-data">
             @csrf
-{{--            id	name	author_name	description	category_id	publication_at	created_at	updated_at--}}
+            {{--            id	name	author_name	description	category_id	publication_at	created_at	updated_at--}}
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">name</label>
-                    <input type="text" class="form-control" name="name" value="{{$book->name}}" id="name" placeholder="Enter Name">
+                    <label for="name_en">name_en</label>
+                    <input type="text" class="form-control" name="name_en"  id="name_en" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
-                    <label for="author_name">author_name</label>
-                    <input type="text" class="form-control" name="author_name" value="{{$book->author_name}}" id="author_name" placeholder="author_name">
+                    <label for="name_ar">name_ar</label>
+                    <input type="text" class="form-control" name="name_ar"  id="name_ar" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
-                    <label for="exampleFormControlTextarea1">description</label>
-                    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{$book->description}}</textarea>
+                    <label for="author_name_en">author_name_en</label>
+                    <input type="text" class="form-control" name="author_name_en"  id="author_name_en" placeholder="author_name">
+                </div>
+                <div class="form-group">
+                    <label for="author_name_er">author_name_er</label>
+                    <input type="text" class="form-control" name="author_name_ar"  id="author_name_er" placeholder="author_name">
+                </div>
+                <div class="form-group">
+                    <label for="description_en">description_en</label>
+                    <textarea class="form-control" name="description" id="description_en" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description_ar">description_ar</label>
+                    <textarea class="form-control" name="description" id="description_ar" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label>publication_at:</label>
-                        <input type="text" class="form-control datepicker" value="{{$book->publication_at}}" name="publication_at" >
+                    <input type="text" class="form-control datepicker"  name="publication_at" >
                 </div>
 
 
 
 
-                    {{--        select categpry         --}}
+                {{--        select categpry         --}}
 
                 <div class="form-group" data-select2-id="29">
                     <label>Category</label>
                     <select class="form-control select2 select2-hidden-accessible"  style="width: 100%;" id="my-select" onchange="updateSub()">
                         <option selected disabled>Choose Category</option>
                         @forelse($categories as $category)
-                            <option @selected($book->subCategory->category->id == $category->id ) value="{{$category->id}}">{{$category->name}}</option>
+                            <option value="{{$category->id}}">{{$category->name}}</option>
 
                         @empty
                             <option disabled> no categories exists</option>
@@ -100,7 +112,7 @@
             <!-- /.card-body -->
 
             <div class="card-footer">
-                <button type="button" onclick="updateItem()" class="btn btn-primary">Submit</button>
+                <button type="button" onclick="createItem()" class="btn btn-primary">Submit</button>
             </div>
         </form>
 

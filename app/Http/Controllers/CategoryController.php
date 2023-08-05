@@ -45,18 +45,12 @@ class CategoryController extends Controller
 
             })->addColumn('img', function ($category) {
                 return '<img src="'.Storage::url("category/$category->img").'" alt="category image" height="40px" width="40px">';
-            })->addColumn('is_active', function ($subCategory) {
+            })->addColumn('is_active', function ($category) {
 
-                if ($subCategory->is_active == "Active"){
-                    return "<span class = 'badge badge-success'>$subCategory->is_active</span>";
-                }else{
-                    return "<span class = 'badge badge-danger'>$subCategory->is_active</span>";
-
-                }
-
+                return $category->is_active;
             })
 
-            ->rawColumns(['is_active', 'img' , 'action'])
+            ->rawColumns([ 'is_active','img' , 'action'])
             ->make(true);
 
     }
@@ -129,7 +123,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all() , [
-            'name' => 'required',
+            'name_ar' => 'required',
+            'name_en' => 'required',
             'img'=> 'required|mimes:png,jpg',
             'is_active'=>'required|string|in:true,false'
         ]);
@@ -142,7 +137,8 @@ class CategoryController extends Controller
             $request->is_active = $request->is_active ?1:0;
 
             $created =  Category::create([
-                'name'=>$request->name ,
+                'name_en'=>$request->name_en ,
+                'name_ar'=>$request->name_ar ,
                 'is_active'=>$request->is_active ,
                 'img'=>$request->img ,
 

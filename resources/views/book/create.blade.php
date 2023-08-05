@@ -40,16 +40,28 @@
 {{--            id	name	author_name	description	category_id	publication_at	created_at	updated_at--}}
             <div class="card-body">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">name</label>
-                    <input type="text" class="form-control" name="name"  id="exampleInputEmail1" placeholder="Enter Name">
+                    <label for="name_en">name_en</label>
+                    <input type="text" class="form-control" name="name_en"  id="name_en" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">author_name</label>
-                    <input type="text" class="form-control" name="author_name"  id="exampleInputEmail1" placeholder="author_name">
+                    <label for="name_ar">name_ar</label>
+                    <input type="text" class="form-control" name="name_ar"  id="name_ar" placeholder="Enter Name">
+            </div>
+                <div class="form-group">
+                    <label for="author_name_en">author_name_en</label>
+                    <input type="text" class="form-control" name="author_name_en"  id="author_name_en" placeholder="author_name">
                 </div>
                 <div class="form-group">
-                    <label for="exampleFormControlTextarea1">description</label>
-                    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <label for="author_name_er">author_name_er</label>
+                    <input type="text" class="form-control" name="author_name_ar"  id="author_name_er" placeholder="author_name">
+                </div>
+                <div class="form-group">
+                    <label for="description_en">description_en</label>
+                    <textarea class="form-control" name="description" id="description_en" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description_ar">description_ar</label>
+                    <textarea class="form-control" name="description" id="description_ar" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label>publication_at:</label>

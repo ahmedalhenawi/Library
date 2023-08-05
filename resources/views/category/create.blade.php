@@ -39,8 +39,13 @@
 
                  <div class="card-body">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">name</label>
-                        <input type="text" class="form-control" name="name"  id="exampleInputEmail1" placeholder="Enter Name">
+                        <label for="name_en">name_en</label>
+                        <input type="text" class="form-control" name="name_en"  id="name_en" placeholder="Enter Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name_ar">name_ar</label>
+                        <input type="text" class="form-control" name="name_ar"  id="name_ar" placeholder="Enter Name">
                     </div>
 
                      <div class="mb-3">

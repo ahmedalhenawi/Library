@@ -4,23 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-class subCategory extends Model
+class SubCategory extends Model
 {
     use HasFactory;
-    protected $fillable = ['name' , 'is_active' , 'img' , 'category_id'];
+    protected $fillable = ['name_en','name_ar' , 'is_active' , 'img' , 'category_id'];
 
     public function books(){
         return $this->hasMany(Book::class);
     }
-    public function getIsActiveAttribute($value){
-        if ($value){
-           return "<span class = 'badge badge-success'>نشط</span>";
+    public function getIsActiveAttribute($value): string
+    {
+        if (LaravelLocalization::setLocale() == 'ar') {
+            if ($value){
+                return "<span class = 'badge badge-success'>نشط</span>";
+            }else{
+                return  "<span class = 'badge bg-danger'>غير نشط</span>";
+            }
         }else{
-          return  "<span class = 'badge bg-danger'>غير نشط</span>";
-
+            if ($value){
+                return "<span class = 'badge badge-success'>Active</span>";
+            }else{
+                return  "<span class = 'badge bg-danger'>NON-Active</span>";
+            }
         }
-//        return $value?"Active":'non-active';
+
     }
     public function category(){
         return $this->belongsTo(Category::class);

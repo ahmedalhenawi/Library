@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\subCategory;
 use Illuminate\Support\Facades\Storage;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -26,12 +27,12 @@ class SubCategoryController extends Controller
         $data  = subCategory::with('category');
         return Datatables::of($data)->addIndexColumn()
             ->addColumn('action' , function ($row){
-                return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>Edit</a>
-                                                       <button onclick='deleting($row->id)' class='btn btn-outline-danger'>Delete</button>";
+                return $btn = "<a class='btn btn-outline-primary' href='". route('category.edit' , $row->id) ."'>". __('index.edit')."</a>
+                                                       <button onclick='deleting($row->id)' class='btn btn-outline-danger'>". __('index.delete')."</button>";
 
             })->addColumn('img', function ($category) {
 //                return '<img src="'.Storage::url("subCategory/$category->img").'" alt="category image" height="40px" width="40px">
-                return '<img src="'.$category->img.'" alt="category image" height="40px" width="40px">';
+                return '<img src="'.Storage::url("subCategory/$category->img") .'" alt="category image" height="40px" width="40px">';
             })->addColumn('is_active', function ($subCategory) {
 
                 return $subCategory->is_active;
@@ -43,7 +44,13 @@ class SubCategoryController extends Controller
 //                }
 
             })->addColumn('parent_name' , function ($subCategory){
-                return  $subCategory->category->name;
+                if (LaravelLocalization::setLocale() == 'ar'){
+                return  $subCategory->category->name_ar;
+                }else{
+                    return  $subCategory->category->name_en;
+
+                }
+
             })
 
             ->rawColumns(['is_active', 'img' , 'parent_name' , 'action'])
@@ -58,7 +65,7 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::select('id','name')->where('is_active' , true)->get();
+        $categories = Category::select('id','name_'.LaravelLocalization::setLocale().' as name')->where('is_active' , 1)->get();
         return view('subCategory.create' , compact('categories'));
 
     }
@@ -69,7 +76,8 @@ class SubCategoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(),[
-            'name' => 'required',
+            'name_ar' => 'required',
+            'name_en' => 'required',
             'is_active' => 'required | in:1,0',
             'img' => 'required|mimes:png,jpg',
             'category_id' => ['required' ,Rule::exists('categories', 'id') ]
@@ -82,7 +90,8 @@ class SubCategoryController extends Controller
                 $request->img = $imgName;
             }
             $created = subCategory::create([
-                'name'=>$request->name,
+                'name_en'=>$request->name_en,
+                'name_ar'=>$request->name_ar,
                 'is_active'=>$request->is_active,
                 'category_id'=>$request->category_id,
                 'img'=>$request->img,

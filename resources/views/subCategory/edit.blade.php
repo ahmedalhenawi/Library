@@ -39,9 +39,13 @@
 
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">name</label>
-                    <input type="text" class="form-control" name="name"  value="{{$subCategory->name}}" id="name" placeholder="Enter Name">
+                    <label for="name">name_en</label>
+                    <input type="name_en" class="form-control" name="name_en"  value="{{$subCategory->name_en}}" id="name_en" placeholder="Enter Name">
                 </div>
+                <div class="form-group">
+                    <label for="name">name_ar</label>
+                    <input type="text" class="form-control" name="name_en"  value="{{$subCategory->name_en}}" id="name_en" placeholder="Enter Name">
+                </div>composer require mcamara/laravel-localization
                 <div class="form-group">
                     <label for="exampleInputFile">File input</label>
                     <div class="input-group">

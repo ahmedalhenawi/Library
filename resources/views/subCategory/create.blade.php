@@ -41,8 +41,12 @@
 
                  <div class="card-body">
                     <div class="form-group">
-                        <label for="name">name</label>
-                        <input type="text" class="form-control" name="name" value="{{ @old('name') }}" id="name" placeholder="Enter Name">
+                        <label for="name_en">name_en</label>
+                        <input type="text" class="form-control" name="name_en" value="{{ @old('name_en') }}" id="name_en" placeholder="Enter Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="name_en">name_ar</label>
+                        <input type="text" class="form-control" name="name_ar" value="{{ @old('name_en') }}" id="name_en" placeholder="Enter Name">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputFile">File input</label>

@@ -39,8 +39,13 @@
 
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">name</label>
-                    <input type="text" class="form-control" name="name"  value="{{$category->name}}" id="name" placeholder="Enter Name">
+                    <label for="name_en">name_en</label>
+                    <input type="text" class="form-control" name="name_en"  value="{{$category->name_en}}" id="name" placeholder="Enter Name">
+                </div>
+
+                <div class="form-group">
+                    <label for="name_ar">name_ar</label>
+                    <input type="text" class="form-control" name="name_ar"  value="{{$category->name_ar}}" id="name" placeholder="Enter Name">
                 </div>
 
                 <div class="mb-3">

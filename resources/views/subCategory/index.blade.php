@@ -11,9 +11,9 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4"  style="width: 100%">
         <div>
-            <h3>show sub categories</h3>
+            <h3>{{__('index.show sub categories')}}</h3>
         </div>
-        <a href="{{ route('subCategory.create') }}" class="btn btn-dark px-5">Add new Sub category</a>
+        <a href="{{ route('subCategory.create') }}" class="btn btn-dark px-5">{{__('index.Add new sub category')}}</a>
     </div>
 
 
@@ -26,11 +26,11 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">name</th>
-            <th scope="col">image</th>
-            <th scope="col">status</th>
-            <th scope="col">parent_name</th>
-            <th scope="col">actions</th>
+            <th scope="col">{{__('index.name')}}</th>
+            <th scope="col">{{__('index.is_active')}}</th>
+            <th scope="col">{{__('index.img')}}</th>
+            <th scope="col">{{__('index.parent_name')}}</th>
+            <th scope="col">{{__('index.actions')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -134,8 +134,8 @@
                     name: 'id'
                 },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'name_{{LaravelLocalization::setLocale()}}' ,
+                        name: '{{__('index.name')}}'
                     },
                     {
                         data: 'is_active',
@@ -150,7 +150,7 @@
                     },
                     {
                         data: 'parent_name',
-                        name: 'parent_name'
+                        name: '{{__('index.parent_name')}}'
                     },
                     {
                         data: 'action',

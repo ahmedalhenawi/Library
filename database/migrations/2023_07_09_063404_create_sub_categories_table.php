@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name_en');
+            $table->string('name_ar');
             $table->boolean('is_active');
             $table->string('img');
             $table->foreignId('category_id')->constrained('categories');

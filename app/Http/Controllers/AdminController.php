@@ -25,7 +25,7 @@ class AdminController extends Controller
             'password' => 'required',
         ]);
 
-        $admin = new Admin;
+        $admin = new Admin();
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->password = Hash::make($request->password);
@@ -42,15 +42,19 @@ class AdminController extends Controller
     public function loginAdmin(Request $request){
 //        dd($request->all());
         $request->validate([
-            'email'=>'required|email:rfc,dns',
+            'email'=>'required',
             'password'=>'required',
         ]);
         $admin = Admin::where('email' , '=' , $request->email)->first();
+//        dd($admin);
         if ($admin){
                 if (Hash::check($request->password , $admin->password)){
-                    session()->put('loginId' , $admin->id);
+//                    session()->put('loginId' , $admin->id);
                     return redirect('/');
-            }else{
+                    Auth::guard('admin')->login();
+                    return redirect()->back()->with('msg' , 'تم تسجيل الدخول');
+
+                }else{
                     return redirect()->back()->with('msg' , 'email and password not match');
                 }
         }else{

@@ -71,59 +71,23 @@
             <!-- Messages Dropdown Menu -->
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-comments"></i>
-                    <span class="badge badge-danger navbar-badge">3</span>
+                    <i class="fas fa-language" style="font-size: 26px"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <ul>
+                        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                            <li>
+                                <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                    {{ $properties['native'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                     <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="{{asset('cms/dist/img/user1-128x128.jpg')}}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Brad Diesel
-                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">Call me whenever you can...</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
+
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="{{asset('cms/dist/img/user8-128x128.jpg')}}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    John Pierce
-                                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">I got your message bro</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="{{asset('cms/dist/img/user3-128x128.jpg')}}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Nora Silvester
-                                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">The subject goes here</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+
                 </div>
             </li>
             <!-- Notifications Dropdown Menu -->
@@ -135,6 +99,8 @@
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-item dropdown-header">15 Notifications</span>
                     <div class="dropdown-divider"></div>
+
+
                     <a href="#" class="dropdown-item">
                         <i class="fas fa-envelope mr-2"></i> 4 new messages
                         <span class="float-right text-muted text-sm">3 mins</span>
@@ -183,9 +149,12 @@
                     <img src="{{asset('cms/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">Alexander Pierce</a>
+                    <a href="#" class="d-block">
+
+                    </a>
                     <a href="{{route('logout')}}" class="d-block text-danger">logout</a>
 
+                    {{__('home.welcome')}}
 
                 </div>
             </div>
@@ -211,7 +180,7 @@
                         <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                                Dashboard
+                                {{__('home.Dashboard')}}
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -230,7 +199,8 @@
                         <a href="#" class="nav-link">
                             <i class="right fas fa-angle-left"></i>
                             <p>
-                                Category
+                                {{__('home.category')}}
+
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -238,13 +208,13 @@
                             <li class="nav-item">
                                 <a href="{{route('category.index')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Show All Categoires</p>
+                                    <p>{{__('home.Show All Categories')}}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{route('category.create')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Add Categories</p>
+                                    <p>{{__('home.Add Categories')}}</p>
                                 </a>
                             </li>
                         </ul>
@@ -255,7 +225,7 @@
                         <a href="#" class="nav-link">
                             <i class="right fas fa-angle-left"></i>
                             <p>
-                                Sub Category
+                                {{__('home.subcategory')}}
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -263,13 +233,13 @@
                             <li class="nav-item">
                                 <a href="{{route('subCategory.index')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Show All Sub Categoires</p>
+                                    <p>{{__("home.Show All Sub Categories")}}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{route('subCategory.create')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Add Sub Categories</p>
+                                    <p>{{__('home.Add Sub Categories')}}</p>
                                 </a>
                             </li>
                         </ul>
@@ -280,20 +250,20 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="right fas fa-angle-left"></i>
-                                Book
-                            </p>
+                            {{__('home.book')}}
+
                         </a>
                         <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{route('book.index')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Show All Books</p>
+                                    <p>{{__('home.Show All Books')}}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{route('book.create')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Add Book</p>
+                                    <p>{{__("home.Add Book")}}</p>
                                 </a>
                             </li>
                         </ul>
